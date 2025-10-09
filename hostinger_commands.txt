@@ -5,7 +5,7 @@ git clone https://github.com/aklanulh/wms.git
 cd wms
 
 # 2. Setup environment
-cp .env.hostinger .env
+cp .env.production.example .env
 
 # 3. Install dependencies (tanpa dev dependencies)
 composer install --no-dev --optimize-autoloader

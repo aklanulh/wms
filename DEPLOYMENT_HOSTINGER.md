@@ -24,7 +24,7 @@
 
 ### 2. Setup Environment
 
-1. **Rename file .env.hostinger menjadi .env**
+1. **Copy file .env.production.example menjadi .env**
 2. **Edit file .env jika diperlukan:**
    - Sesuaikan APP_URL dengan domain Anda
    - Pastikan database credentials sudah benar

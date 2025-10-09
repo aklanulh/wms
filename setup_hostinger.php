@@ -12,12 +12,12 @@
 
 echo "=== WMS Setup untuk Hostinger (PHP 8.2 Compatible) ===\n";
 
-// 1. Copy .env.hostinger ke .env
-if (file_exists('.env.hostinger')) {
-    copy('.env.hostinger', '.env');
-    echo "✓ File .env berhasil dibuat dari .env.hostinger\n";
+// 1. Copy .env.production.example ke .env
+if (file_exists('.env.production.example')) {
+    copy('.env.production.example', '.env');
+    echo "✓ File .env berhasil dibuat dari .env.production.example\n";
 } else {
-    echo "✗ File .env.hostinger tidak ditemukan\n";
+    echo "✗ File .env.production.example tidak ditemukan\n";
 }
 
 // 2. Generate APP_KEY
