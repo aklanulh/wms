@@ -1,0 +1,54 @@
+# Debug Dashboard Error 500
+
+## Perintah untuk Hostinger Terminal:
+
+# 1. Update aplikasi dari GitHub
+git pull origin main
+
+# 2. Update dependencies
+composer install --no-dev --optimize-autoloader
+
+# 3. Clear semua cache
+php artisan config:clear
+php artisan route:clear  
+php artisan view:clear
+php artisan cache:clear
+
+# 4. Cek apakah semua tabel ada
+php artisan migrate:status
+
+# 5. Jalankan migrasi jika ada yang missing
+php artisan migrate --force
+
+# 6. Seed database jika diperlukan
+php artisan db:seed --force
+
+# 7. Cache ulang untuk production
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# 8. Cek log error untuk detail
+tail -f storage/logs/laravel.log
+
+## Kemungkinan Masalah:
+
+1. **CustomerSchedule table tidak ada** - Dashboard mencoba akses tabel yang belum di-migrate
+2. **MySQL GROUP BY compatibility** - Query perlu semua kolom di GROUP BY
+3. **Missing relationships** - Model relationships yang tidak ada
+4. **Database connection** - Kredensial database salah
+
+## Solusi yang Diterapkan:
+
+1. **Error Handling** - Semua query kompleks dibungkus try-catch
+2. **Table Existence Check** - Cek apakah tabel ada sebelum query
+3. **MySQL Compatibility** - Fix GROUP BY queries untuk MySQL strict mode
+4. **Fallback Error Page** - Tampil halaman error informatif jika dashboard gagal
+5. **Logging** - Log semua error untuk debugging
+
+## Test Dashboard:
+
+Setelah update, coba akses:
+- https://wms.msapt.co.id/dashboard
+
+Jika masih error, akan tampil halaman error dengan detail masalah.
