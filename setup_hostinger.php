@@ -2,9 +2,15 @@
 /**
  * Setup Script untuk Hostinger
  * Jalankan script ini setelah upload ke server Hostinger
+ * 
+ * Cara menjalankan:
+ * 1. Upload semua file ke public_html
+ * 2. Buka terminal/SSH di cPanel
+ * 3. cd public_html
+ * 4. php setup_hostinger.php
  */
 
-echo "=== WMS Setup untuk Hostinger ===\n";
+echo "=== WMS Setup untuk Hostinger (PHP 8.2 Compatible) ===\n";
 
 // 1. Copy .env.hostinger ke .env
 if (file_exists('.env.hostinger')) {

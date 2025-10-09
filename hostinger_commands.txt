@@ -1,0 +1,38 @@
+# Perintah untuk Hostinger Terminal/SSH
+
+# 1. Clone repository
+git clone https://github.com/aklanulh/wms.git
+cd wms
+
+# 2. Setup environment
+cp .env.hostinger .env
+
+# 3. Install dependencies (tanpa dev dependencies)
+composer install --no-dev --optimize-autoloader
+
+# 4. Generate APP_KEY
+php artisan key:generate --force
+
+# 5. Set permissions
+chmod -R 755 storage
+chmod -R 755 bootstrap/cache
+
+# 6. Clear cache
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan cache:clear
+
+# 7. Run migrations
+php artisan migrate --force
+
+# 8. Seed database
+php artisan db:seed --force
+
+# 9. Cache config untuk production
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# 10. Verify installation
+php artisan --version
