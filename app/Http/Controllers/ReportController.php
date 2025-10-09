@@ -704,7 +704,7 @@ class ReportController extends Controller
         // Get available years for dropdown
         $availableYears = StockMovement::where('customer_id', $id)
             ->where('type', 'out')
-            ->selectRaw('strftime("%Y", transaction_date) as year')
+            ->selectRaw('YEAR(transaction_date) as year')
             ->distinct()
             ->orderBy('year', 'desc')
             ->pluck('year')
@@ -991,7 +991,7 @@ class ReportController extends Controller
         // Get available years for dropdown
         $availableYears = StockMovement::where('product_id', $id)
             ->where('type', 'out')
-            ->selectRaw('strftime("%Y", transaction_date) as year')
+            ->selectRaw('YEAR(transaction_date) as year')
             ->distinct()
             ->orderBy('year', 'desc')
             ->pluck('year')

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\StockMovement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -68,28 +69,36 @@ class ProductController extends Controller
 
     public function show(Request $request, Product $product)
     {
-        $product->load('category', 'stockMovements.supplier', 'stockMovements.customer');
-        
-        // Get selected year from request, default to current year
-        $selectedYear = $request->get('year', date('Y'));
-        
-        // Generate chart data for selected year
-        $chartData = $this->generateProductChartData($product->id, $selectedYear);
-        
-        // Get available years for dropdown
-        $availableYears = StockMovement::where('product_id', $product->id)
-            ->where('type', 'out')
-            ->selectRaw('strftime("%Y", transaction_date) as year')
-            ->distinct()
-            ->orderBy('year', 'desc')
-            ->pluck('year')
-            ->toArray();
+        try {
+            $product->load('category', 'stockMovements.supplier', 'stockMovements.customer');
             
-        if (empty($availableYears)) {
-            $availableYears = [date('Y')];
+            // Get selected year from request, default to current year
+            $selectedYear = $request->get('year', date('Y'));
+            
+            // Generate chart data for selected year
+            $chartData = $this->generateProductChartData($product->id, $selectedYear);
+            
+            // Get available years for dropdown
+            $availableYears = StockMovement::where('product_id', $product->id)
+                ->where('type', 'out')
+                ->selectRaw('YEAR(transaction_date) as year')
+                ->distinct()
+                ->orderBy('year', 'desc')
+                ->pluck('year')
+                ->toArray();
+                
+            if (empty($availableYears)) {
+                $availableYears = [date('Y')];
+            }
+            
+            return view('products.show', compact('product', 'chartData', 'selectedYear', 'availableYears'));
+            
+        } catch (\Exception $e) {
+            Log::error('Product show error: ' . $e->getMessage() . ' for product ID: ' . $product->id);
+            
+            // Return simplified view without chart data
+            return view('products.show-simple', compact('product'));
         }
-        
-        return view('products.show', compact('product', 'chartData', 'selectedYear', 'availableYears'));
     }
 
     public function edit(Product $product)
