@@ -22,10 +22,56 @@ class StockMovementController extends Controller
 {
     public function stockInIndex()
     {
-        $stockIns = StockMovement::stockIn()
+        // Group stock movements by transaction batch
+        $stockInGroups = StockMovement::stockIn()
             ->with(['product', 'supplier'])
             ->orderBy('transaction_date', 'desc')
-            ->paginate(15);
+            ->get()
+            ->groupBy(function ($item) {
+                // Group by combination of order_number, invoice_number, supplier_id, and date
+                return $item->order_number . '|' . $item->invoice_number . '|' . $item->supplier_id . '|' . $item->transaction_date->format('Y-m-d');
+            })
+            ->map(function ($group) {
+                $first = $group->first();
+                
+                // Calculate subtotal (before tax) for each item
+                $subtotal = $group->sum(function($item) {
+                    return $item->quantity * $item->unit_price;
+                });
+                
+                // Calculate total amount (subtotal + tax if applicable)
+                $totalAmount = $subtotal;
+                if($first->include_tax) {
+                    $totalAmount = $subtotal + ($subtotal * 0.11); // Add 11% PPN
+                }
+                
+                return (object) [
+                    'id' => $first->id,
+                    'order_number' => $first->order_number,
+                    'invoice_number' => $first->invoice_number,
+                    'supplier' => $first->supplier,
+                    'transaction_date' => $first->transaction_date,
+                    'notes' => $first->notes,
+                    'include_tax' => $first->include_tax,
+                    'items_count' => $group->count(),
+                    'total_quantity' => $group->sum('quantity'),
+                    'subtotal_amount' => $subtotal,
+                    'total_amount' => $totalAmount,
+                    'items' => $group
+                ];
+            })
+            ->values();
+
+        // Paginate the grouped results
+        $perPage = 15;
+        $currentPage = request()->get('page', 1);
+        $stockIns = new \Illuminate\Pagination\LengthAwarePaginator(
+            $stockInGroups->forPage($currentPage, $perPage),
+            $stockInGroups->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'pageName' => 'page']
+        );
 
         return view('stock.in.index', compact('stockIns'));
     }
