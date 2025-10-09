@@ -33,11 +33,11 @@ class AdminProductController extends Controller
         // Stock status filter
         if ($request->has('stock_status') && $request->stock_status) {
             if ($request->stock_status === 'low') {
-                $query->whereRaw('current_stock <= minimum_stock');
+                $query->whereColumn('current_stock', '<=', 'minimum_stock');
             } elseif ($request->stock_status === 'out') {
                 $query->where('current_stock', 0);
             } elseif ($request->stock_status === 'available') {
-                $query->whereRaw('current_stock > minimum_stock');
+                $query->whereColumn('current_stock', '>', 'minimum_stock');
             }
         }
 

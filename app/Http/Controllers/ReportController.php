@@ -753,7 +753,7 @@ class ReportController extends Controller
         $products = StockMovement::with('product')
             ->where('customer_id', $customerId)
             ->where('type', 'out')
-            ->whereRaw('strftime("%Y", transaction_date) = ?', [$year])
+            ->whereYear('transaction_date', $year)
             ->select('product_id')
             ->distinct()
             ->get()
@@ -780,12 +780,11 @@ class ReportController extends Controller
             $monthlyData = [];
             
             for ($month = 1; $month <= 12; $month++) {
-                $monthStr = str_pad($month, 2, '0', STR_PAD_LEFT);
                 $quantity = StockMovement::where('customer_id', $customerId)
                     ->where('product_id', $product->id)
                     ->where('type', 'out')
-                    ->whereRaw('strftime("%Y", transaction_date) = ?', [$year])
-                    ->whereRaw('strftime("%m", transaction_date) = ?', [$monthStr])
+                    ->whereYear('transaction_date', $year)
+                    ->whereMonth('transaction_date', $month)
                     ->sum('quantity');
                     
                 $monthlyData[] = $quantity;
@@ -816,7 +815,7 @@ class ReportController extends Controller
         $customers = StockMovement::with('customer')
             ->where('product_id', $productId)
             ->where('type', 'out')
-            ->whereRaw('strftime("%Y", transaction_date) = ?', [$year])
+            ->whereYear('transaction_date', $year)
             ->select('customer_id')
             ->distinct()
             ->get()
@@ -844,12 +843,11 @@ class ReportController extends Controller
             $monthlyData = [];
             
             for ($month = 1; $month <= 12; $month++) {
-                $monthStr = str_pad($month, 2, '0', STR_PAD_LEFT);
                 $quantity = StockMovement::where('product_id', $productId)
                     ->where('customer_id', $customer->id)
                     ->where('type', 'out')
-                    ->whereRaw('strftime("%Y", transaction_date) = ?', [$year])
-                    ->whereRaw('strftime("%m", transaction_date) = ?', [$monthStr])
+                    ->whereYear('transaction_date', $year)
+                    ->whereMonth('transaction_date', $month)
                     ->sum('quantity');
                     
                 $monthlyData[] = $quantity;

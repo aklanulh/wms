@@ -21,7 +21,7 @@ class AdminDashboardController extends Controller
         
         // Basic stock statistics (no financial data)
         $totalProducts = Product::count();
-        $lowStockProducts = Product::whereRaw('current_stock <= minimum_stock')->count();
+        $lowStockProducts = Product::whereColumn('current_stock', '<=', 'minimum_stock')->count();
         $outOfStockProducts = Product::where('current_stock', 0)->count();
         $totalSuppliers = Supplier::count();
         $totalCustomers = Customer::count();
@@ -110,7 +110,7 @@ class AdminDashboardController extends Controller
 
         // Critical stock alerts (products with stock <= minimum)
         $criticalStockList = Product::with('category')
-            ->whereRaw('current_stock <= minimum_stock')
+            ->whereColumn('current_stock', '<=', 'minimum_stock')
             ->orderBy('current_stock', 'asc')
             ->take(10)
             ->get();
