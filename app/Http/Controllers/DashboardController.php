@@ -11,6 +11,7 @@ use App\Models\CustomerSchedule;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -73,25 +74,33 @@ class DashboardController extends Controller
             ->whereYear('transaction_date', now()->year)
             ->sum(DB::raw('quantity * COALESCE(unit_price, 0)'));
 
-        // Stock aging analysis with product details
-        $fastMovingProducts = Product::with('category')
-            ->where('current_stock', '>', 0)
-            ->whereHas('stockMovements', function($q) {
-                $q->where('transaction_date', '>=', Carbon::now()->subDays(30));
-            })->get();
-            
-        $slowMovingProducts = Product::with('category')
-            ->where('current_stock', '>', 0)
-            ->whereHas('stockMovements', function($q) {
-                $q->where('transaction_date', '<', Carbon::now()->subDays(30))
-                  ->where('transaction_date', '>=', Carbon::now()->subDays(90));
-            })->get();
-            
-        $deadStockProducts = Product::with('category')
-            ->where('current_stock', '>', 0)
-            ->whereDoesntHave('stockMovements', function($q) {
-                $q->where('transaction_date', '>=', Carbon::now()->subDays(90));
-            })->get();
+        // Stock aging analysis with product details (with error handling)
+        $fastMovingProducts = collect([]);
+        $slowMovingProducts = collect([]);
+        $deadStockProducts = collect([]);
+        
+        try {
+            $fastMovingProducts = Product::with('category')
+                ->where('current_stock', '>', 0)
+                ->whereHas('stockMovements', function($q) {
+                    $q->where('transaction_date', '>=', Carbon::now()->subDays(30));
+                })->get();
+                
+            $slowMovingProducts = Product::with('category')
+                ->where('current_stock', '>', 0)
+                ->whereHas('stockMovements', function($q) {
+                    $q->where('transaction_date', '<', Carbon::now()->subDays(30))
+                      ->where('transaction_date', '>=', Carbon::now()->subDays(90));
+                })->get();
+                
+            $deadStockProducts = Product::with('category')
+                ->where('current_stock', '>', 0)
+                ->whereDoesntHave('stockMovements', function($q) {
+                    $q->where('transaction_date', '>=', Carbon::now()->subDays(90));
+                })->get();
+        } catch (\Exception $e) {
+            Log::warning('Error loading stock aging data: ' . $e->getMessage());
+        }
 
         $stockAging = [
             'fast_moving' => $fastMovingProducts->count(),
@@ -102,15 +111,21 @@ class DashboardController extends Controller
             'dead_stock_products' => $deadStockProducts
         ];
 
-        // Top performing products
-        $topProducts = Product::select('products.*', DB::raw('SUM(stock_movements.quantity) as total_sold'))
-            ->join('stock_movements', 'products.id', '=', 'stock_movements.product_id')
-            ->where('stock_movements.type', 'out')
-            ->where('stock_movements.transaction_date', '>=', Carbon::now()->subMonth())
-            ->groupBy('products.id')
-            ->orderBy('total_sold', 'desc')
-            ->take(5)
-            ->get();
+        // Top performing products (with error handling)
+        $topProducts = collect([]);
+        try {
+            $topProducts = Product::select('products.*', DB::raw('SUM(stock_movements.quantity) as total_sold'))
+                ->join('stock_movements', 'products.id', '=', 'stock_movements.product_id')
+                ->where('stock_movements.type', 'out')
+                ->where('stock_movements.transaction_date', '>=', Carbon::now()->subMonth())
+                ->groupBy('products.id', 'products.code', 'products.name', 'products.description', 'products.category_id', 'products.unit', 'products.lot_number', 'products.expired_date', 'products.distribution_permit', 'products.price', 'products.current_stock', 'products.minimum_stock', 'products.created_at', 'products.updated_at')
+                ->orderBy('total_sold', 'desc')
+                ->take(5)
+                ->get();
+        } catch (\Exception $e) {
+            Log::warning('Error loading top products: ' . $e->getMessage());
+            $topProducts = collect([]);
+        }
 
         // Recent stock movements (last 15)
         $recentMovements = StockMovement::with(['product', 'supplier', 'customer'])
@@ -148,7 +163,7 @@ class DashboardController extends Controller
 
         // Critical stock alerts (products with stock <= minimum)
         $criticalStockList = Product::with('category')
-            ->whereRaw('current_stock <= minimum_stock')
+            ->whereColumn('current_stock', '<=', 'minimum_stock')
             ->orderBy('current_stock', 'asc')
             ->take(10)
             ->get();
@@ -229,36 +244,58 @@ class DashboardController extends Controller
             ];
         }
 
-        // Customer Schedules for alerts
+        // Customer Schedules for alerts (with error handling)
         $customerSchedules = [
-            'overdue' => CustomerSchedule::with(['customer', 'product'])
-                ->overdue()
-                ->orderBy('scheduled_date', 'asc')
-                ->take(5)
-                ->get(),
-            'due_today' => CustomerSchedule::with(['customer', 'product'])
-                ->dueToday()
-                ->orderBy('scheduled_date', 'asc')
-                ->take(5)
-                ->get(),
-            'due_this_week' => CustomerSchedule::with(['customer', 'product'])
-                ->dueThisWeek()
-                ->orderBy('scheduled_date', 'asc')
-                ->take(10)
-                ->get(),
-            'pending' => CustomerSchedule::with(['customer', 'product'])
-                ->pending()
-                ->orderBy('scheduled_date', 'asc')
-                ->take(10)
-                ->get()
+            'overdue' => collect([]),
+            'due_today' => collect([]),
+            'due_this_week' => collect([]),
+            'pending' => collect([])
         ];
 
         $scheduleStats = [
-            'total_pending' => CustomerSchedule::pending()->count(),
-            'overdue_count' => CustomerSchedule::overdue()->count(),
-            'due_today_count' => CustomerSchedule::dueToday()->count(),
-            'due_this_week_count' => CustomerSchedule::dueThisWeek()->count()
+            'total_pending' => 0,
+            'overdue_count' => 0,
+            'due_today_count' => 0,
+            'due_this_week_count' => 0
         ];
+
+        // Try to load customer schedules if table exists
+        try {
+            if (DB::getSchemaBuilder()->hasTable('customer_schedules')) {
+                $customerSchedules = [
+                    'overdue' => CustomerSchedule::with(['customer', 'product'])
+                        ->overdue()
+                        ->orderBy('scheduled_date', 'asc')
+                        ->take(5)
+                        ->get(),
+                    'due_today' => CustomerSchedule::with(['customer', 'product'])
+                        ->dueToday()
+                        ->orderBy('scheduled_date', 'asc')
+                        ->take(5)
+                        ->get(),
+                    'due_this_week' => CustomerSchedule::with(['customer', 'product'])
+                        ->dueThisWeek()
+                        ->orderBy('scheduled_date', 'asc')
+                        ->take(10)
+                        ->get(),
+                    'pending' => CustomerSchedule::with(['customer', 'product'])
+                        ->pending()
+                        ->orderBy('scheduled_date', 'asc')
+                        ->take(10)
+                        ->get()
+                ];
+
+                $scheduleStats = [
+                    'total_pending' => CustomerSchedule::pending()->count(),
+                    'overdue_count' => CustomerSchedule::overdue()->count(),
+                    'due_today_count' => CustomerSchedule::dueToday()->count(),
+                    'due_this_week_count' => CustomerSchedule::dueThisWeek()->count()
+                ];
+            }
+        } catch (\Exception $e) {
+            // If customer_schedules table doesn't exist, use empty collections
+            Log::warning('CustomerSchedule table not found or error: ' . $e->getMessage());
+        }
 
         return view('dashboard', compact(
             'totalProducts',

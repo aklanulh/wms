@@ -35,8 +35,15 @@ Route::get('/', function () {
 
 // Protected Routes - Super Admin Only (Dashboard, Products, Reports)
 Route::middleware(['auth', 'super_admin'])->group(function () {
-    // Dashboard - Super Admin Only
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Dashboard - Super Admin Only (with fallback)
+    Route::get('/dashboard', function() {
+        try {
+            return app(DashboardController::class)->index(request());
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Dashboard error: ' . $e->getMessage());
+            return view('dashboard-error', ['error' => $e->getMessage()]);
+        }
+    })->name('dashboard');
 
     // Products - Super Admin Only
     Route::resource('products', ProductController::class);
