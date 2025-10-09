@@ -4,6 +4,9 @@
 .env.backup
 .env.production
 .env.local
+.env.hostinger
+deployment_credentials.txt
+database_config.txt
 .phpactor.json
 .phpunit.result.cache
 /.fleet

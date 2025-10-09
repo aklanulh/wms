@@ -5,9 +5,9 @@
 1. **Login ke cPanel Hostinger**
 2. **Buka phpMyAdmin**
 3. **Gunakan database yang sudah ada:**
-   - Database: `u919556019_wms`
-   - Username: `u919556019_supermsa`
-   - Password: `Aa153456!`
+   - Database: `YOUR_DATABASE_NAME`
+   - Username: `YOUR_DATABASE_USERNAME`
+   - Password: `YOUR_DATABASE_PASSWORD`
 
 ## Langkah-langkah Deployment
 
@@ -81,8 +81,8 @@ chmod -R 755 bootstrap/cache
 
 1. **Buka website di browser**
 2. **Login dengan:**
-   - Email: admin@msa.com
-   - Password: password
+   - Email: YOUR_ADMIN_EMAIL
+   - Password: YOUR_ADMIN_PASSWORD
 
 ## Troubleshooting
 

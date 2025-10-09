@@ -19,5 +19,5 @@ php artisan view:cache
 
 # 5. Test akses
 # Buka https://wms.msapt.co.id (seharusnya redirect ke login jika belum login)
-# Login dengan admin@msa.com / password
+# Login dengan YOUR_ADMIN_EMAIL / YOUR_ADMIN_PASSWORD
 # Seharusnya redirect ke dashboard yang sesuai dengan role user

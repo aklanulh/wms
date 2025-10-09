@@ -75,7 +75,6 @@ if ($return === 0) {
     echo "✓ Migrations berhasil dijalankan\n";
 } else {
     echo "✗ Gagal menjalankan migrations\n";
-    print_r($output);
 }
 
 // 6. Seed database
@@ -83,6 +82,7 @@ echo "Seeding database...\n";
 exec('php artisan db:seed --force', $output, $return);
 if ($return === 0) {
     echo "✓ Database seeding berhasil\n";
+    echo "Login: YOUR_ADMIN_EMAIL / YOUR_ADMIN_PASSWORD\n";
 } else {
     echo "✗ Gagal seeding database\n";
     print_r($output);
@@ -90,5 +90,5 @@ if ($return === 0) {
 
 echo "\n=== Setup Selesai ===\n";
 echo "Aplikasi WMS siap digunakan!\n";
-echo "Login: admin@msa.com / password\n";
+echo "Login: YOUR_ADMIN_EMAIL / YOUR_ADMIN_PASSWORD\n";
 ?>
