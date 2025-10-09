@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ProductController;
@@ -19,10 +20,23 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Root route - redirect based on authentication and role
+Route::get('/', function () {
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+    
+    if (Auth::user()->isSuperAdmin()) {
+        return redirect()->route('dashboard');
+    } else {
+        return redirect()->route('admin.dashboard');
+    }
+})->name('home');
+
 // Protected Routes - Super Admin Only (Dashboard, Products, Reports)
 Route::middleware(['auth', 'super_admin'])->group(function () {
     // Dashboard - Super Admin Only
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Products - Super Admin Only
     Route::resource('products', ProductController::class);
