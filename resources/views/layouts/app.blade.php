@@ -44,7 +44,7 @@
              x-init="sidebarOpen = window.innerWidth >= 1024"
              @resize.window="sidebarOpen = window.innerWidth >= 1024">
             <div class="p-4 flex items-center space-x-3">
-                <img src="{{ asset('images/logowms.png') }}" alt="WMS Logo" class="w-10 h-10 object-contain">
+                <img src="/images/logo.png" alt="WMS Logo" class="w-10 h-10 object-contain" onerror="console.log('Logo failed to load'); this.src='/images/logowms.png'">
                 <div>
                     <h1 class="text-xl font-bold">WMS - MSA</h1>
                     <p class="text-sm text-blue-200">Warehouse Management</p>

@@ -18,7 +18,7 @@
         <!-- Logo and Company Info -->
         <div class="text-center mb-8">
             <div class="bg-white rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center shadow-lg p-2">
-                <img src="{{ asset('images/logowms.png') }}" alt="WMS Logo" class="w-full h-full object-contain">
+                <img src="/images/logo.png" alt="WMS Logo" class="w-full h-full object-contain" onerror="this.src='/images/logowms.png'">
             </div>
             <h1 class="text-2xl font-bold text-gray-800">PT. Mitrajaya Selaras Abadi</h1>
             <p class="text-gray-600 mt-1">Warehouse Management System</p>
