@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - PT. Mitrajaya Selaras Abadi</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logowms.png') }}">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -11,11 +17,11 @@
     <div class="max-w-md w-full mx-4">
         <!-- Logo and Company Info -->
         <div class="text-center mb-8">
-            <div class="bg-white rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center shadow-lg">
-                <i class="fas fa-warehouse text-3xl text-blue-600"></i>
+            <div class="bg-white rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center shadow-lg p-2">
+                <img src="{{ asset('images/logowms.png') }}" alt="WMS Logo" class="w-full h-full object-contain">
             </div>
             <h1 class="text-2xl font-bold text-gray-800">PT. Mitrajaya Selaras Abadi</h1>
-            <p class="text-gray-600 mt-1">Sistem Manajemen Inventory</p>
+            <p class="text-gray-600 mt-1">Warehouse Management System</p>
         </div>
 
         <!-- Login Form -->
