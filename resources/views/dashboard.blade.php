@@ -27,22 +27,20 @@
 <!-- Main KPI Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
     <!-- Total Products -->
-    <a href="{{ route('products.index') }}" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-blue-500 cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600 mb-1">Total Produk</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ number_format($totalProducts) }}</p>
-                    <p class="text-xs text-blue-600 mt-1">
-                        <i class="fas fa-boxes mr-1"></i>Item Tersedia
-                    </p>
-                </div>
-                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-                    <i class="fas fa-boxes text-2xl"></i>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-blue-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600 mb-1">Total Produk</p>
+                <p class="text-3xl font-bold text-gray-900">{{ number_format($totalProducts) }}</p>
+                <p class="text-xs text-blue-600 mt-1">
+                    <i class="fas fa-boxes mr-1"></i>Item Tersedia
+                </p>
+            </div>
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                <i class="fas fa-boxes text-2xl"></i>
             </div>
         </div>
-    </a>
+    </div>
 
     <!-- Inventory Value -->
     <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-green-500">
@@ -61,76 +59,68 @@
     </div>
 
     <!-- Critical Stock Alert -->
-    <a href="{{ route('reports.stock') }}?low_stock=1" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-red-500 cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600 mb-1">Stok Kritis</p>
-                    <p class="text-3xl font-bold text-red-600">{{ number_format($lowStockProducts) }}</p>
-                    <p class="text-xs text-red-600 mt-1">
-                        <i class="fas fa-exclamation-triangle mr-1"></i>Perlu Restock
-                    </p>
-                </div>
-                <div class="p-3 rounded-full bg-red-100 text-red-600">
-                    <i class="fas fa-exclamation-triangle text-2xl"></i>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-red-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600 mb-1">Stok Kritis</p>
+                <p class="text-3xl font-bold text-red-600">{{ number_format($lowStockProducts) }}</p>
+                <p class="text-xs text-red-600 mt-1">
+                    <i class="fas fa-exclamation-triangle mr-1"></i>Perlu Restock
+                </p>
+            </div>
+            <div class="p-3 rounded-full bg-red-100 text-red-600">
+                <i class="fas fa-exclamation-triangle text-2xl"></i>
             </div>
         </div>
-    </a>
+    </div>
 
     <!-- Out of Stock -->
-    <a href="{{ route('reports.stock') }}?out_of_stock=1" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-orange-500 cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600 mb-1">Stok Habis</p>
-                    <p class="text-3xl font-bold text-orange-600">{{ number_format($outOfStockProducts) }}</p>
-                    <p class="text-xs text-orange-600 mt-1">
-                        <i class="fas fa-times-circle mr-1"></i>Produk
-                    </p>
-                </div>
-                <div class="p-3 rounded-full bg-orange-100 text-orange-600">
-                    <i class="fas fa-times-circle text-2xl"></i>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-orange-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600 mb-1">Stok Habis</p>
+                <p class="text-3xl font-bold text-orange-600">{{ number_format($outOfStockProducts) }}</p>
+                <p class="text-xs text-orange-600 mt-1">
+                    <i class="fas fa-times-circle mr-1"></i>Produk
+                </p>
+            </div>
+            <div class="p-3 rounded-full bg-orange-100 text-orange-600">
+                <i class="fas fa-times-circle text-2xl"></i>
             </div>
         </div>
-    </a>
+    </div>
 
     <!-- Total Suppliers -->
-    <a href="{{ route('suppliers.index') }}" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-purple-500 cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600 mb-1">Total Distributor</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ number_format($totalSuppliers) }}</p>
-                    <p class="text-xs text-purple-600 mt-1">
-                        <i class="fas fa-truck mr-1"></i>Partner
-                    </p>
-                </div>
-                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-                    <i class="fas fa-truck text-2xl"></i>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-purple-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600 mb-1">Total Distributor</p>
+                <p class="text-3xl font-bold text-gray-900">{{ number_format($totalSuppliers) }}</p>
+                <p class="text-xs text-purple-600 mt-1">
+                    <i class="fas fa-truck mr-1"></i>Partner
+                </p>
+            </div>
+            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                <i class="fas fa-truck text-2xl"></i>
             </div>
         </div>
-    </a>
+    </div>
 
     <!-- Total Customers -->
-    <a href="{{ route('customers.index') }}" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-indigo-500 cursor-pointer">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600 mb-1">Total Customer</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ number_format($totalCustomers) }}</p>
-                    <p class="text-xs text-indigo-600 mt-1">
-                        <i class="fas fa-users mr-1"></i>Klien
-                    </p>
-                </div>
-                <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
-                    <i class="fas fa-users text-2xl"></i>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-indigo-500">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-gray-600 mb-1">Total Customer</p>
+                <p class="text-3xl font-bold text-gray-900">{{ number_format($totalCustomers) }}</p>
+                <p class="text-xs text-indigo-600 mt-1">
+                    <i class="fas fa-users mr-1"></i>Klien
+                </p>
+            </div>
+            <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
+                <i class="fas fa-users text-2xl"></i>
             </div>
         </div>
-    </a>
+    </div>
 </div>
 
 <!-- Monthly Activity -->
@@ -154,73 +144,65 @@
         </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <a href="{{ route('stock.in.index') }}" class="block">
-            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-200 cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-blue-100 text-sm font-medium">Stok Masuk</p>
-                        <p class="text-3xl font-bold mt-2">{{ number_format($monthlyStockInSelected) }}</p>
-                        <p class="text-blue-100 text-sm mt-1">Unit Masuk</p>
-                        <p class="text-blue-200 text-xs mt-2 flex items-center">
-                            <i class="fas fa-list-alt mr-1"></i>
-                            {{ number_format($monthlyStockInTransactionsSelected) }} Transaksi
-                        </p>
-                    </div>
-                    <div class="bg-white bg-opacity-20 p-3 rounded-full">
-                        <i class="fas fa-arrow-down text-2xl"></i>
-                    </div>
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-blue-100 text-sm font-medium">Stok Masuk</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($monthlyStockInSelected) }}</p>
+                    <p class="text-blue-100 text-sm mt-1">Unit Masuk</p>
+                    <p class="text-blue-200 text-xs mt-2 flex items-center">
+                        <i class="fas fa-list-alt mr-1"></i>
+                        {{ number_format($monthlyStockInTransactionsSelected) }} Transaksi
+                    </p>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                    <i class="fas fa-arrow-down text-2xl"></i>
                 </div>
             </div>
-        </a>
+        </div>
 
-        <a href="{{ route('stock.out.index') }}" class="block">
-            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-200 cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-red-100 text-sm font-medium">Stok Keluar</p>
-                        <p class="text-3xl font-bold mt-2">{{ number_format($monthlyStockOutSelected) }}</p>
-                        <p class="text-red-100 text-sm mt-1">Unit Keluar</p>
-                        <p class="text-red-200 text-xs mt-2 flex items-center">
-                            <i class="fas fa-list-alt mr-1"></i>
-                            {{ number_format($monthlyStockOutTransactionsSelected) }} Transaksi
-                        </p>
-                    </div>
-                    <div class="bg-white bg-opacity-20 p-3 rounded-full">
-                        <i class="fas fa-arrow-up text-2xl"></i>
-                    </div>
+        <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-red-100 text-sm font-medium">Stok Keluar</p>
+                    <p class="text-3xl font-bold mt-2">{{ number_format($monthlyStockOutSelected) }}</p>
+                    <p class="text-red-100 text-sm mt-1">Unit Keluar</p>
+                    <p class="text-red-200 text-xs mt-2 flex items-center">
+                        <i class="fas fa-list-alt mr-1"></i>
+                        {{ number_format($monthlyStockOutTransactionsSelected) }} Transaksi
+                    </p>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                    <i class="fas fa-arrow-up text-2xl"></i>
                 </div>
             </div>
-        </a>
+        </div>
 
-        <a href="{{ route('reports.index') }}" class="block">
-            <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-200 cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-green-100 text-sm font-medium">Total Penjualan</p>
-                        <p class="text-2xl font-bold mt-2">Rp {{ number_format($monthlyRevenueSelected, 0, ',', '.') }}</p>
-                        <p class="text-green-100 text-sm mt-1">Penjualan</p>
-                    </div>
-                    <div class="bg-white bg-opacity-20 p-3 rounded-full">
-                        <i class="fas fa-chart-line text-2xl"></i>
-                    </div>
+        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-green-100 text-sm font-medium">Total Penjualan</p>
+                    <p class="text-2xl font-bold mt-2">Rp {{ number_format($monthlyRevenueSelected, 0, ',', '.') }}</p>
+                    <p class="text-green-100 text-sm mt-1">Penjualan</p>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                    <i class="fas fa-chart-line text-2xl"></i>
                 </div>
             </div>
-        </a>
+        </div>
 
-        <a href="{{ route('reports.index') }}" class="block">
-            <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-200 cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-purple-100 text-sm font-medium">Total Belanja</p>
-                        <p class="text-2xl font-bold mt-2">Rp {{ number_format($monthlyPurchaseSelected, 0, ',', '.') }}</p>
-                        <p class="text-purple-100 text-sm mt-1">Pembelian</p>
-                    </div>
-                    <div class="bg-white bg-opacity-20 p-3 rounded-full">
-                        <i class="fas fa-shopping-cart text-2xl"></i>
-                    </div>
+        <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl shadow-lg p-6 text-white transform hover:scale-105 transition-all duration-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-purple-100 text-sm font-medium">Total Belanja</p>
+                    <p class="text-2xl font-bold mt-2">Rp {{ number_format($monthlyPurchaseSelected, 0, ',', '.') }}</p>
+                    <p class="text-purple-100 text-sm mt-1">Pembelian</p>
+                </div>
+                <div class="bg-white bg-opacity-20 p-3 rounded-full">
+                    <i class="fas fa-shopping-cart text-2xl"></i>
                 </div>
             </div>
-        </a>
+        </div>
     </div>
 </div>
 
@@ -468,20 +450,19 @@
 <!-- New Product Alerts & Expiry Warnings -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <!-- Recent Stock In -->
-    <a href="{{ route('stock.in.index') }}" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-cyan-500 cursor-pointer">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
-                        <i class="fas fa-arrow-down text-cyan-600 mr-2"></i>
-                        Stok Baru Masuk
-                    </h3>
-                    <p class="text-sm text-gray-600">30 hari terakhir</p>
-                </div>
-                <div class="p-3 rounded-full bg-cyan-100 text-cyan-600">
-                    <span class="text-2xl font-bold">{{ $recentStockIn->count() }}</span>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-cyan-500">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
+                    <i class="fas fa-arrow-down text-cyan-600 mr-2"></i>
+                    Stok Baru Masuk
+                </h3>
+                <p class="text-sm text-gray-600">30 hari terakhir</p>
             </div>
+            <div class="p-3 rounded-full bg-cyan-100 text-cyan-600">
+                <span class="text-2xl font-bold">{{ $recentStockIn->count() }}</span>
+            </div>
+        </div>
         <div class="max-h-48 overflow-y-auto">
             @forelse($recentStockIn as $stockIn)
                 <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
@@ -508,20 +489,19 @@
     </div>
 
     <!-- Products Expiring in 3 Months -->
-    <a href="{{ route('reports.stock') }}?expiring=3" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-yellow-500 cursor-pointer">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
-                        <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
-                        Expired 3 Bulan
-                    </h3>
-                    <p class="text-sm text-gray-600">Peringatan dini</p>
-                </div>
-                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                    <span class="text-2xl font-bold">{{ $expiring3Months->count() }}</span>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-yellow-500">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 mr-2"></i>
+                    Expired 3 Bulan
+                </h3>
+                <p class="text-sm text-gray-600">Peringatan dini</p>
             </div>
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <span class="text-2xl font-bold">{{ $expiring3Months->count() }}</span>
+            </div>
+        </div>
         <div class="max-h-48 overflow-y-auto">
             @forelse($expiring3Months as $product)
                 <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
@@ -546,20 +526,19 @@
     </div>
 
     <!-- Products Expiring in 2 Months -->
-    <a href="{{ route('reports.stock') }}?expiring=2" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-red-500 cursor-pointer">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
-                        <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
-                        Expired 2 Bulan
-                    </h3>
-                    <p class="text-sm text-gray-600">Peringatan kritis</p>
-                </div>
-                <div class="p-3 rounded-full bg-red-100 text-red-600">
-                    <span class="text-2xl font-bold">{{ $expiring2Months->count() }}</span>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-red-500">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
+                    <i class="fas fa-exclamation-circle text-red-600 mr-2"></i>
+                    Expired 2 Bulan
+                </h3>
+                <p class="text-sm text-gray-600">Peringatan kritis</p>
             </div>
+            <div class="p-3 rounded-full bg-red-100 text-red-600">
+                <span class="text-2xl font-bold">{{ $expiring2Months->count() }}</span>
+            </div>
+        </div>
         <div class="max-h-48 overflow-y-auto">
             @forelse($expiring2Months as $product)
                 <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
@@ -587,20 +566,19 @@
 <!-- Stock Aging Analysis -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
     <!-- Fast Moving Products -->
-    <a href="{{ route('reports.stock') }}?movement=fast" class="block">
-        <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-green-500 cursor-pointer">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
-                        <i class="fas fa-rocket text-green-600 mr-2"></i>
-                        Fast Moving
-                    </h3>
-                    <p class="text-sm text-gray-600">Bergerak dalam 30 hari</p>
-                </div>
-                <div class="p-3 rounded-full bg-green-100 text-green-600">
-                    <span class="text-2xl font-bold">{{ $stockAging['fast_moving'] }}</span>
-                </div>
+    <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-green-500">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2 flex items-center">
+                    <i class="fas fa-rocket text-green-600 mr-2"></i>
+                    Fast Moving
+                </h3>
+                <p class="text-sm text-gray-600">Bergerak dalam 30 hari</p>
             </div>
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+                <span class="text-2xl font-bold">{{ $stockAging['fast_moving'] }}</span>
+            </div>
+        </div>
         <div class="max-h-48 overflow-y-auto">
             @forelse($stockAging['fast_moving_products'] as $product)
                 <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
@@ -622,8 +600,7 @@
                 </div>
             @endforelse
         </div>
-        </div>
-    </a>
+    </div>
 
     <!-- Slow Moving Products -->
     <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-yellow-500">
@@ -660,8 +637,7 @@
                 </div>
             @endforelse
         </div>
-        </div>
-    </a>
+    </div>
 
     <!-- Dead Stock Products -->
     <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-red-500">

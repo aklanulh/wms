@@ -32,6 +32,12 @@ class StockMovementSeeder extends Seeder
         // Create Stock Out transactions (last 5 months: May - September 2025)
         $this->createStockOutTransactions($products, $customers);
 
+        // Create Multi-Product Stock In transactions (1 supplier, multiple products in same day)
+        $this->createMultiProductStockInTransactions($products, $suppliers);
+
+        // Create Multi-Product Stock Out transactions (1 customer, multiple products in same day)
+        $this->createMultiProductStockOutTransactions($products, $customers);
+
         $this->command->info('Stock movements seeded successfully!');
     }
 
@@ -675,6 +681,188 @@ class StockMovementSeeder extends Seeder
                         'transaction_date' => Carbon::parse($transaction['date']),
                         'created_at' => Carbon::parse($transaction['date']),
                         'updated_at' => Carbon::parse($transaction['date']),
+                    ]);
+
+                    // Update product current stock
+                    $product->update(['current_stock' => $stockAfter]);
+                    $stockOutCounter++;
+                }
+            }
+        }
+    }
+
+    private function createMultiProductStockInTransactions($products, $suppliers)
+    {
+        // Skenario: 1 supplier dalam 1 hari dengan beberapa produk
+        $multiProductStockInData = [
+            // PT. Kimia Farma - Pembelian besar-besaran tanggal 2025-10-01
+            [
+                'supplier_name' => 'PT. Kimia Farma',
+                'date' => '2025-10-01',
+                'products' => [
+                    ['product_name' => 'DS Diluent', 'quantity' => 200, 'unit_price' => 125000],
+                    ['product_name' => 'SC Cal Plus', 'quantity' => 50, 'unit_price' => 180000],
+                ]
+            ],
+            // CV. Medika Jaya - Restok bulanan tanggal 2025-10-05
+            [
+                'supplier_name' => 'CV. Medika Jaya',
+                'date' => '2025-10-05',
+                'products' => [
+                    ['product_name' => 'Vicom Glucose Kit', 'quantity' => 30, 'unit_price' => 450000],
+                    ['product_name' => 'Vicom Cholesterol Kit', 'quantity' => 25, 'unit_price' => 505000],
+                    ['product_name' => 'Vicom Triglyceride Kit', 'quantity' => 20, 'unit_price' => 540000],
+                    ['product_name' => 'Eppendorf Pipette Tips 10μl', 'quantity' => 100, 'unit_price' => 320000],
+                    ['product_name' => 'Eppendorf Pipette Tips 200μl', 'quantity' => 80, 'unit_price' => 375000],
+                ]
+            ],
+            // PT. Alkes Indonesia - Pembelian alat kesehatan tanggal 2025-10-08
+            [
+                'supplier_name' => 'PT. Alkes Indonesia',
+                'date' => '2025-10-08',
+                'products' => [
+                    ['product_name' => 'Terumo Syringe 3ml', 'quantity' => 2000, 'unit_price' => 2500],
+                    ['product_name' => 'Terumo Syringe 5ml', 'quantity' => 1000, 'unit_price' => 3400],
+                    ['product_name' => 'Ansell Latex Gloves', 'quantity' => 500, 'unit_price' => 85000],
+                    ['product_name' => 'Eppendorf Pipette 10-100μl', 'quantity' => 10, 'unit_price' => 2900000],
+                    ['product_name' => 'Eppendorf Pipette 100-1000μl', 'quantity' => 8, 'unit_price' => 3300000],
+                ]
+            ],
+            // CV. Medika Jaya - Pembelian tubes tanggal 2025-10-12
+            [
+                'supplier_name' => 'CV. Medika Jaya',
+                'date' => '2025-10-12',
+                'products' => [
+                    ['product_name' => 'Falcon Centrifuge Tubes 15ml', 'quantity' => 200, 'unit_price' => 190000],
+                    ['product_name' => 'Falcon Centrifuge Tubes 50ml', 'quantity' => 150, 'unit_price' => 295000],
+                ]
+            ],
+        ];
+
+        $stockInCounter = 1000; // Start from 1000 to avoid conflicts
+        
+        foreach ($multiProductStockInData as $dayTransaction) {
+            $supplier = $suppliers->where('name', $dayTransaction['supplier_name'])->first();
+            if (!$supplier) continue;
+
+            $batchNumber = 'BATCH-' . date('Ymd', strtotime($dayTransaction['date']));
+            
+            foreach ($dayTransaction['products'] as $productData) {
+                $product = $products->where('name', $productData['product_name'])->first();
+                if (!$product) continue;
+
+                $stockBefore = $product->current_stock ?? 0;
+                $stockAfter = $stockBefore + $productData['quantity'];
+
+                StockMovement::create([
+                    'reference_number' => 'SI-' . date('Ymd', strtotime($dayTransaction['date'])) . '-' . str_pad($stockInCounter, 3, '0', STR_PAD_LEFT),
+                    'order_number' => 'PO-' . date('Ymd', strtotime($dayTransaction['date'])) . '-' . $batchNumber,
+                    'invoice_number' => 'INV-' . date('Ymd', strtotime($dayTransaction['date'])) . '-' . $batchNumber,
+                    'product_id' => $product->id,
+                    'type' => 'in',
+                    'quantity' => $productData['quantity'],
+                    'stock_before' => $stockBefore,
+                    'stock_after' => $stockAfter,
+                    'unit_price' => $productData['unit_price'],
+                    'supplier_id' => $supplier->id,
+                    'customer_id' => null,
+                    'notes' => 'Pembelian batch ' . $batchNumber . ' - Multiple products from ' . $supplier->name,
+                    'transaction_date' => Carbon::parse($dayTransaction['date']),
+                    'created_at' => Carbon::parse($dayTransaction['date']),
+                    'updated_at' => Carbon::parse($dayTransaction['date']),
+                ]);
+
+                // Update product current stock
+                $product->update(['current_stock' => $stockAfter]);
+                $stockInCounter++;
+            }
+        }
+    }
+
+    private function createMultiProductStockOutTransactions($products, $customers)
+    {
+        // Skenario: 1 customer dalam 1 hari dengan beberapa barang
+        $multiProductStockOutData = [
+            // RS. Siloam Hospitals - Pembelian besar untuk operasional tanggal 2025-10-03
+            [
+                'customer_name' => 'RS. Siloam Hospitals',
+                'date' => '2025-10-03',
+                'products' => [
+                    ['product_name' => 'DS Diluent', 'quantity' => 50, 'unit_price' => 155000],
+                    ['product_name' => 'Terumo Syringe 3ml', 'quantity' => 500, 'unit_price' => 3200],
+                    ['product_name' => 'Terumo Syringe 5ml', 'quantity' => 200, 'unit_price' => 4300],
+                    ['product_name' => 'Ansell Latex Gloves', 'quantity' => 100, 'unit_price' => 108000],
+                ]
+            ],
+            // Lab Klinik Prodia - Restok kit laboratorium tanggal 2025-10-07
+            [
+                'customer_name' => 'Lab Klinik Prodia',
+                'date' => '2025-10-07',
+                'products' => [
+                    ['product_name' => 'Vicom Glucose Kit', 'quantity' => 15, 'unit_price' => 550000],
+                    ['product_name' => 'Vicom Cholesterol Kit', 'quantity' => 12, 'unit_price' => 610000],
+                    ['product_name' => 'Vicom Triglyceride Kit', 'quantity' => 10, 'unit_price' => 650000],
+                    ['product_name' => 'SC Cal Plus', 'quantity' => 20, 'unit_price' => 225000],
+                    ['product_name' => 'Eppendorf Pipette Tips 10μl', 'quantity' => 40, 'unit_price' => 420000],
+                    ['product_name' => 'Eppendorf Pipette Tips 200μl', 'quantity' => 30, 'unit_price' => 470000],
+                ]
+            ],
+            // Puskesmas Tanah Abang - Pembelian rutin bulanan tanggal 2025-10-10
+            [
+                'customer_name' => 'Puskesmas Tanah Abang',
+                'date' => '2025-10-10',
+                'products' => [
+                    ['product_name' => 'Terumo Syringe 3ml', 'quantity' => 300, 'unit_price' => 3250],
+                    ['product_name' => 'Ansell Latex Gloves', 'quantity' => 80, 'unit_price' => 108000],
+                    ['product_name' => 'SC Cal Plus', 'quantity' => 15, 'unit_price' => 223000],
+                ]
+            ],
+            // Lab Klinik Prodia - Pembelian tubes dan consumables tanggal 2025-10-15
+            [
+                'customer_name' => 'Lab Klinik Prodia',
+                'date' => '2025-10-15',
+                'products' => [
+                    ['product_name' => 'Falcon Centrifuge Tubes 15ml', 'quantity' => 50, 'unit_price' => 250000],
+                    ['product_name' => 'Falcon Centrifuge Tubes 50ml', 'quantity' => 30, 'unit_price' => 380000],
+                    ['product_name' => 'DS Diluent', 'quantity' => 25, 'unit_price' => 157000],
+                ]
+            ],
+        ];
+
+        $stockOutCounter = 1000; // Start from 1000 to avoid conflicts
+        
+        foreach ($multiProductStockOutData as $dayTransaction) {
+            $customer = $customers->where('name', $dayTransaction['customer_name'])->first();
+            if (!$customer) continue;
+
+            $batchNumber = 'BATCH-OUT-' . date('Ymd', strtotime($dayTransaction['date']));
+            
+            foreach ($dayTransaction['products'] as $productData) {
+                $product = $products->where('name', $productData['product_name'])->first();
+                if (!$product) continue;
+
+                $stockBefore = $product->current_stock ?? 0;
+
+                // Only create transaction if we have enough stock
+                if ($stockBefore >= $productData['quantity']) {
+                    $stockAfter = $stockBefore - $productData['quantity'];
+
+                    StockMovement::create([
+                        'reference_number' => 'SO-' . date('Ymd', strtotime($dayTransaction['date'])) . '-' . str_pad($stockOutCounter, 3, '0', STR_PAD_LEFT),
+                        'order_number' => 'SO-' . date('Ymd', strtotime($dayTransaction['date'])) . '-' . $batchNumber,
+                        'invoice_number' => 'INV-OUT-' . date('Ymd', strtotime($dayTransaction['date'])) . '-' . $batchNumber,
+                        'product_id' => $product->id,
+                        'type' => 'out',
+                        'quantity' => $productData['quantity'],
+                        'stock_before' => $stockBefore,
+                        'stock_after' => $stockAfter,
+                        'unit_price' => $productData['unit_price'],
+                        'supplier_id' => null,
+                        'customer_id' => $customer->id,
+                        'notes' => 'Penjualan batch ' . $batchNumber . ' - Multiple products to ' . $customer->name,
+                        'transaction_date' => Carbon::parse($dayTransaction['date']),
+                        'created_at' => Carbon::parse($dayTransaction['date']),
+                        'updated_at' => Carbon::parse($dayTransaction['date']),
                     ]);
 
                     // Update product current stock
