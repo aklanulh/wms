@@ -7,8 +7,8 @@
     <title>{{ config('app.name', 'Warehouse Management System') }}</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url('public/favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url('public/favicon.ico') }}">
     <link rel="apple-touch-icon" href="{{ url('public/images/logowms.png') }}">
     
     <script src="https://cdn.tailwindcss.com"></script>
