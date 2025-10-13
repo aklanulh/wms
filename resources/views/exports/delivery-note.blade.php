@@ -7,24 +7,33 @@
     <style>
         @page {
             size: A4;
-            margin: 15mm;
+            margin: 8mm;
         }
         
         body {
             font-family: Arial, sans-serif;
-            font-size: 11px;
-            line-height: 1.2;
+            font-size: 30px;
+            line-height: 1;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             color: #000;
+            background-color: #f5f5f5;
+        }
+        
+        .delivery-container {
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            border: 2px solid #000;
         }
         
         .header {
+            border: 2px solid #000;
+            border-bottom: 1px solid #000;
+            padding: 8px 8px 8px 8px;
             display: flex;
             align-items: flex-start;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
         }
         
         .logo {
@@ -47,70 +56,97 @@
         }
         
         .company-name {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 2px;
+            color: #000;
         }
         
         .company-subtitle {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
             margin-bottom: 3px;
+            color: #000;
         }
         
         .company-address {
-            font-size: 10px;
-            line-height: 1.3;
+            font-size: 11px;
+            line-height: 1.2;
+            color: #000;
         }
         
         .header-right {
             text-align: right;
-            font-size: 10px;
+            font-size: 13px;
             width: 200px;
+        }
+        
+        .date-info {
+            margin-bottom: 5px;
+        }
+        
+        .customer-info strong {
+            font-weight: bold;
         }
         
         .delivery-title {
             text-align: center;
-            font-size: 20px;
+            font-size: 22px;
             font-weight: bold;
-            margin: 20px 0;
-            letter-spacing: 2px;
+            padding: 4px 0;
+            margin: 4px 0;
         }
         
-        .delivery-info {
-            margin-bottom: 15px;
+        .delivery-details {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            font-size: 10px;
+            border: 1px solid #000;
+            margin-bottom: 0;
         }
         
-        .delivery-number {
-            font-weight: bold;
-            margin-bottom: 10px;
+        .delivery-left {
+            width: 50%;
         }
         
-        .delivery-text {
-            margin-bottom: 15px;
+        .delivery-right {
+            width: 45%;
+            text-align: right;
+        }
+        
+        .detail-row {
+            margin-bottom: 1px;
         }
         
         .products-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin-top: 0;
         }
         
         .products-table th {
-            background-color: #f0f0f0;
+            background-color: #e8e8e8;
             border: 1px solid #000;
-            padding: 8px 4px;
+            padding: 3px 2px;
             text-align: center;
             font-weight: bold;
-            font-size: 10px;
+            font-size: 11px;
+            height: 18px;
         }
         
         .products-table td {
             border: 1px solid #000;
-            padding: 6px 4px;
+            padding: 2px 3px;
             text-align: center;
-            font-size: 10px;
+            font-size: 12px;
+            height: 16px;
             vertical-align: middle;
+        }
+        
+        .center-cell {
+            text-align: center;
+            padding: 2px 3px;
         }
         
         .products-table .text-left {
@@ -152,43 +188,60 @@
             body { 
                 margin: 0; 
                 padding: 0;
+                background-color: white !important;
+            }
+            .delivery-container { 
+                border: none; 
+                box-shadow: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">
-            <img src="{{ asset('public/images/logo.png') }}" alt="PT MSA Logo">
-        </div>
-        <div class="company-info">
-            <div class="company-name">PT. MITRAJAYA SELARAS ABADI</div>
-            <div class="company-subtitle">LABORATORY & MEDICAL EQUIPMENT</div>
-            <div class="company-address">
-                Ruko Maison Avenue MA 19, Kota Wisata, Cibubur<br>
-                Telp. / Fax : 82482412 , WA. 08119466470
+    <div class="delivery-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <img src="{{ asset('public/images/logo.png') }}" alt="PT MSA Logo">
+            </div>
+            <div class="company-info">
+                <div class="company-name">PT. MITRAJAYA SELARAS ABADI</div>
+                <div class="company-subtitle">LABORATORY & MEDICAL EQUIPMENT</div>
+                <div class="company-address">
+                    Ruko Maison Avenue MA 19, Kota Wisata, Cibubur<br>
+                    Telp. / Fax : 82482412 , WA. 08119466470
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="date-info">
+                    Bogor, {{ now()->format('d F Y') }}<br>
+                    Kepada Yth,<br>
+                    <strong>{{ $customerName ?? 'Klinik Pratama Zam Zam Medika' }}</strong>
+                </div>
+                <div class="customer-info">
+                    @if($customer && $customer->address)
+                        {!! nl2br(e($customer->address)) !!}
+                    @else
+                        Jl. Raya Dramaga RT.02/RW.02<br>
+                        Leuwikopo, Kec. Dramaga, Kota Bogor<br>
+                        Jawa Barat
+                    @endif
+                </div>
             </div>
         </div>
-        <div class="header-right">
-            Bogor, {{ now()->format('d F Y') }}<br>
-            Kepada Yth,<br>
-            <strong>{{ $customerName ?? 'Klinik Pratama Zam Zam Medika' }}</strong><br>
-            @if($customer && $customer->address)
-                {!! nl2br(e($customer->address)) !!}
-            @else
-                Jl. Raya Dramaga RT.02/RW.02<br>
-                Leuwikopo, Kec. Dramaga, Kota Bogor<br>
-                Jawa Barat
-            @endif
+        
+        <!-- Delivery Title -->
+        <div class="delivery-title">SURAT JALAN</div>
+        
+        <!-- Delivery Details -->
+        <div class="delivery-details">
+            <div class="delivery-left">
+                <div class="detail-row"><strong>No. Surat Jalan : {{ $deliveryNumber ?? 'SJ/1036/IX/MSA/25' }}</strong></div>
+            </div>
+            <div class="delivery-right">
+                <div class="detail-row"><strong>Telah kami terima dengan baik barang sebagai berikut :</strong></div>
+            </div>
         </div>
-    </div>
-    
-    <div class="delivery-title">SURAT JALAN</div>
-    
-    <div class="delivery-info">
-        <div class="delivery-number">No. : {{ $deliveryNumber ?? 'SJ/1036/IX/MSA/25' }}</div>
-        <div class="delivery-text">Telah kami terima dengan baik barang sebagai berikut :</div>
-    </div>
     
     <table class="products-table">
         <thead>
@@ -209,31 +262,32 @@
                     $unit = $product ? $product->unit : 'pcs';
                 @endphp
                 <tr>
-                    <td class="text-center">{{ $index + 1 }}</td>
+                    <td class="center-cell">{{ $index + 1 }}</td>
                     <td class="text-left">{{ $product ? $product->name : 'Unknown Product' }}</td>
-                    <td class="text-center">{{ $product && $product->expired_date ? \Carbon\Carbon::parse($product->expired_date)->format('d/m/Y') : '' }}</td>
-                    <td class="text-center">{{ $product ? $product->code : '' }}</td>
-                    <td class="text-center">{{ $product ? $product->lot_number : '' }}</td>
-                    <td class="text-center">{{ $item['quantity'] }} {{ $unit }}</td>
-                    <td class="text-center"></td>
+                    <td class="center-cell">{{ $product && $product->expired_date ? \Carbon\Carbon::parse($product->expired_date)->format('d/m/Y') : '' }}</td>
+                    <td class="center-cell">{{ $product ? $product->code : '' }}</td>
+                    <td class="center-cell">{{ $product ? $product->lot_number : '' }}</td>
+                    <td class="center-cell">{{ $item['quantity'] }} {{ $unit }}</td>
+                    <td class="center-cell"></td>
                 </tr>
             @endforeach
             
             <!-- Empty rows to fill space -->
-            @for($i = count($cartData); $i < 10; $i++)
+            @for($i = count($cartData); $i < 6; $i++)
                 <tr>
-                    <td class="text-center">&nbsp;</td>
+                    <td class="center-cell">&nbsp;</td>
                     <td class="text-left">&nbsp;</td>
-                    <td class="text-center">&nbsp;</td>
-                    <td class="text-center">&nbsp;</td>
-                    <td class="text-center">&nbsp;</td>
-                    <td class="text-center">&nbsp;</td>
-                    <td class="text-center">&nbsp;</td>
+                    <td class="center-cell">&nbsp;</td>
+                    <td class="center-cell">&nbsp;</td>
+                    <td class="center-cell">&nbsp;</td>
+                    <td class="center-cell">&nbsp;</td>
+                    <td class="center-cell">&nbsp;</td>
                 </tr>
             @endfor
         </tbody>
     </table>
     
+    <!-- Footer -->
     <div class="footer-section">
         <div class="footer-left">
             <strong>Penerima</strong>
@@ -256,6 +310,7 @@
                 <span class="signature-name">({{ $signerName ?? 'Yayuk P. Wardani' }})</span>
             </div>
         </div>
+    </div>
     </div>
 </body>
 </html>
