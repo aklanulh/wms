@@ -42,6 +42,18 @@
             object-fit: contain;
         }
         
+        .logo-fallback {
+            display: none;
+            font-size: 10px;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+            line-height: 1.2;
+            padding: 5px;
+            border: 2px solid #000;
+            background-color: #f0f0f0;
+        }
+        
         .company-info {
             flex: 1;
         }
@@ -159,7 +171,8 @@
 <body>
     <div class="header">
         <div class="logo">
-            <img src="{{ asset('images/logo.png') }}" alt="PT MSA Logo">
+            <img src="{{ url('images/logo.png') }}" alt="PT MSA Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="logo-fallback">PT MSA<br>LOGO</div>
         </div>
         <div class="company-info">
             <div class="company-name">PT. MITRAJAYA SELARAS ABADI</div>
