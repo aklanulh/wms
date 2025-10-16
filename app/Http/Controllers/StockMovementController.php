@@ -228,7 +228,10 @@ class StockMovementController extends Controller
             ['path' => request()->url(), 'pageName' => 'page']
         );
 
-        return view('stock.out.index', compact('stockOuts'));
+        // Get count of pending drafts for notification badge
+        $draftCount = \App\Models\StockOutDraft::count();
+
+        return view('stock.out.index', compact('stockOuts', 'draftCount'));
     }
 
     public function stockOutCreate()

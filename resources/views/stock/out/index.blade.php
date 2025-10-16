@@ -6,9 +6,14 @@
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-900">Daftar Stok Keluar</h1>
     <div class="flex space-x-3">
-        <a href="{{ route('stock.out.draft.index') }}" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg flex items-center">
+        <a href="{{ route('stock.out.draft.index') }}" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg flex items-center relative">
             <i class="fas fa-save mr-2"></i>
             Draft
+            @if($draftCount > 0)
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center min-w-[1.5rem]">
+                    {{ $draftCount > 99 ? '99+' : $draftCount }}
+                </span>
+            @endif
         </a>
         <a href="{{ route('stock.out.create') }}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center">
             <i class="fas fa-plus mr-2"></i>
