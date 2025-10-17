@@ -306,7 +306,7 @@
                 <div style="height: 30px;"></div>
             </div>
             <div class="signature-area">
-                <span class="signature-name">(.....................)</span>
+                <span class="signature-name">(....................................)</span>
             </div>
         </div>
         <div class="footer-center">

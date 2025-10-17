@@ -399,7 +399,7 @@
         <div class="footer-section">
             <div class="footer-left" style="text-align: center;">
                 <strong>Penerima</strong><br><br>
-                <div class="signature-area">(...........................)</div>
+                <div class="signature-area">(....................................)</div>
             </div>
             <div class="footer-center">
                 <strong>For Payment, Please Transfer to :</strong><br>

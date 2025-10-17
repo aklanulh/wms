@@ -670,7 +670,7 @@ class StockMovementController extends Controller
             $sheet->setCellValue('C' . ($footerRow + 3), 'NO. REK. 133 00 1559409 6');
             
             // Signature lines
-            $sheet->setCellValue('A' . ($footerRow + 6), '(..............................)');
+            $sheet->setCellValue('A' . ($footerRow + 6), '(....................................)');
             $sheet->setCellValue('H' . ($footerRow + 6), '(KADARUSMAN)');
 
             // Apply styling
