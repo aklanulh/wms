@@ -15,8 +15,12 @@ class ProductController extends Controller
         $products = Product::with('category')
             ->orderBy('name')
             ->get();
+            
+        $categories = ProductCategory::withCount('products')
+            ->orderBy('name')
+            ->get();
 
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'categories'));
     }
 
     public function create()

@@ -14,6 +14,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminHistoryController;
 use App\Http\Controllers\CustomerScheduleController;
+use App\Http\Controllers\ProductCategoryController;
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -48,6 +49,14 @@ Route::middleware(['auth', 'super_admin'])->group(function () {
     // Products - Super Admin Only
     Route::resource('products', ProductController::class);
     Route::post('products/ajax', [ProductController::class, 'store'])->name('products.ajax.store');
+    
+    // Product Categories - Super Admin Only
+    Route::prefix('product-categories')->name('product-categories.')->group(function () {
+        Route::get('/', [ProductCategoryController::class, 'index'])->name('index');
+        Route::post('/', [ProductCategoryController::class, 'store'])->name('store');
+        Route::put('/{category}', [ProductCategoryController::class, 'update'])->name('update');
+        Route::delete('/{category}', [ProductCategoryController::class, 'destroy'])->name('destroy');
+    });
 
     // Reports - Super Admin Only
     Route::prefix('reports')->name('reports.')->group(function () {
