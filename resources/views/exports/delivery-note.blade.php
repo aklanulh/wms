@@ -168,21 +168,25 @@
             display: flex;
             justify-content: space-between;
             font-size: 10px;
+            align-items: flex-end;
         }
         
         .footer-left, .footer-center, .footer-right {
             width: 30%;
             text-align: center;
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
         .signature-area {
-            margin-top: 60px;
-            border-bottom: 1px solid #000;
             min-height: 20px;
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
             padding-bottom: 2px;
+            margin-top: auto;
         }
         
         .signature-name {
@@ -296,24 +300,33 @@
     <!-- Footer -->
     <div class="footer-section">
         <div class="footer-left">
-            <strong>Penerima</strong>
+            <div style="height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
+                <div style="height: 10px;"></div>
+                <strong>Penerima</strong>
+                <div style="height: 30px;"></div>
+            </div>
             <div class="signature-area">
                 <span class="signature-name">(.....................)</span>
             </div>
         </div>
         <div class="footer-center">
-            <strong>Hormat Kami,</strong><br>
-            <strong>Penanggung Jawab</strong><br>
-            <strong>Teknis</strong>
+            <div style="height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
+                <strong>Hormat Kami,</strong>
+                <strong>Penanggung Jawab</strong>
+                <strong>Teknis</strong>
+            </div>
             <div class="signature-area">
                 <span class="signature-name">(Ria Kamelia)</span>
             </div>
         </div>
         <div class="footer-right">
-            <strong>Hormat Kami,</strong><br>
-            <strong>Pengirim</strong>
+            <div style="height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
+                <strong>Hormat Kami,</strong>
+                <strong>Pengirim</strong>
+                <div style="height: 20px;"></div>
+            </div>
             <div class="signature-area">
-                <span class="signature-name">({{ $signerName ?? 'Yayuk P. Wardani' }})</span>
+                <span class="signature-name">(Yayuk P. Wardani)</span>
             </div>
         </div>
     </div>

@@ -385,14 +385,6 @@
                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">{{ old('notes', isset($draft) ? $draft->notes : '') }}</textarea>
                     </div>
                     
-                    <div>
-                        <label for="signer_name" class="block text-sm font-medium text-gray-700 mb-2">Nama Penandatangan Faktur</label>
-                        <input type="text" name="signer_name" id="signer_name" 
-                               value="{{ old('signer_name', isset($draft) ? $draft->signer_name : 'KADARUSMAN') }}" 
-                               placeholder="Masukkan nama penandatangan"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <p class="text-xs text-gray-500 mt-1">Nama ini akan muncul di bagian "Hormat Kami" pada faktur</p>
-                    </div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
@@ -669,7 +661,6 @@ function stockOutForm() {
                 // Get form data
                 const orderNumber = document.getElementById('order_number')?.value || '';
                 const invoiceNumber = document.getElementById('invoice_number')?.value || '';
-                const signerName = document.getElementById('signer_name')?.value || 'KADARUSMAN';
                 const paymentTerms = document.getElementById('payment_terms')?.value || '30';
                 
                 // Create form data
@@ -680,7 +671,6 @@ function stockOutForm() {
                 formData.append('order_number', orderNumber);
                 formData.append('invoice_number', invoiceNumber);
                 formData.append('include_tax', this.includeTax ? '1' : '0');
-                formData.append('signer_name', signerName);
                 formData.append('payment_terms', paymentTerms);
                 
                 // Get CSRF token
@@ -724,7 +714,6 @@ function stockOutForm() {
                 // Get form data
                 const orderNumber = document.getElementById('order_number')?.value || '';
                 const invoiceNumber = document.getElementById('invoice_number')?.value || '';
-                const signerName = document.getElementById('signer_name')?.value || 'KADARUSMAN';
                 const paymentTerms = document.getElementById('payment_terms')?.value || '30';
                 
                 // Create form data
@@ -735,7 +724,6 @@ function stockOutForm() {
                 formData.append('order_number', orderNumber);
                 formData.append('invoice_number', invoiceNumber);
                 formData.append('include_tax', this.includeTax ? '1' : '0');
-                formData.append('signer_name', signerName);
                 formData.append('payment_terms', paymentTerms);
                 
                 // Get CSRF token
@@ -777,7 +765,6 @@ function stockOutForm() {
             try {
                 // Get form data
                 const deliveryNumber = document.getElementById('delivery_number')?.value || '';
-                const signerName = document.getElementById('signer_name')?.value || 'Yayuk P. Wardani';
                 
                 // Create form data
                 const formData = new FormData();
@@ -785,7 +772,6 @@ function stockOutForm() {
                 formData.append('customer_name', this.selectedCustomer || 'Customer');
                 formData.append('customer_id', this.finalCustomerId || this.selectedCustomerId || '');
                 formData.append('delivery_number', deliveryNumber);
-                formData.append('signer_name', signerName);
                 
                 // Get CSRF token
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -831,7 +817,6 @@ function stockOutForm() {
                 const invoiceNumber = document.getElementById('invoice_number')?.value || '';
                 const transactionDate = document.getElementById('transaction_date')?.value || '';
                 const notes = document.getElementById('notes')?.value || '';
-                const signerName = document.getElementById('signer_name')?.value || 'KADARUSMAN';
                 const paymentTerms = document.getElementById('payment_terms')?.value || '30';
                 const deliveryNumber = document.getElementById('delivery_number')?.value || '';
                 
@@ -844,7 +829,6 @@ function stockOutForm() {
                 formData.append('invoice_number', invoiceNumber);
                 formData.append('transaction_date', transactionDate);
                 formData.append('notes', notes);
-                formData.append('signer_name', signerName);
                 formData.append('payment_terms', paymentTerms);
                 formData.append('delivery_number', deliveryNumber);
                 formData.append('include_tax', this.includeTax ? '1' : '0');

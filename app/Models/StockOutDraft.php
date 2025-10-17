@@ -17,7 +17,6 @@ class StockOutDraft extends Model
         'invoice_number',
         'transaction_date',
         'notes',
-        'signer_name',
         'payment_terms',
         'delivery_number',
         'include_tax',

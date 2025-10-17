@@ -49,14 +49,6 @@ Route::middleware(['auth', 'super_admin'])->group(function () {
     // Products - Super Admin Only
     Route::resource('products', ProductController::class);
     Route::post('products/ajax', [ProductController::class, 'store'])->name('products.ajax.store');
-    
-    // Product Categories - Super Admin Only
-    Route::prefix('product-categories')->name('product-categories.')->group(function () {
-        Route::get('/', [ProductCategoryController::class, 'index'])->name('index');
-        Route::post('/', [ProductCategoryController::class, 'store'])->name('store');
-        Route::put('/{category}', [ProductCategoryController::class, 'update'])->name('update');
-        Route::delete('/{category}', [ProductCategoryController::class, 'destroy'])->name('destroy');
-    });
 
     // Reports - Super Admin Only
     Route::prefix('reports')->name('reports.')->group(function () {
@@ -210,4 +202,12 @@ Route::middleware('auth')->group(function () {
     // Customers - Available to regular admins
     Route::resource('customers', CustomerController::class);
     Route::post('customers/ajax', [CustomerController::class, 'store'])->name('customers.ajax.store');
+    
+    // Product Categories - Available to all authenticated users
+    Route::prefix('product-categories')->name('product-categories.')->group(function () {
+        Route::get('/', [ProductCategoryController::class, 'index'])->name('index');
+        Route::post('/', [ProductCategoryController::class, 'store'])->name('store');
+        Route::put('/{category}', [ProductCategoryController::class, 'update'])->name('update');
+        Route::delete('/{category}', [ProductCategoryController::class, 'destroy'])->name('destroy');
+    });
 });

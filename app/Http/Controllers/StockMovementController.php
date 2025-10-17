@@ -424,7 +424,6 @@ class StockMovementController extends Controller
                 $customerName = $stockMovements->first()->customer->name ?? 'Customer';
                 $includeTax = $stockMovements->first()->include_tax;
                 $paymentTerms = (int) ($stockMovements->first()->payment_terms ?? 30);
-                $signerName = $stockMovements->first()->signer_name ?? 'KADARUSMAN';
             }
             
             // Get customer data if customer_id is provided
@@ -448,10 +447,6 @@ class StockMovementController extends Controller
             // Generate HTML content that matches the invoice format
             $terbilang = $this->terbilang($finalAmount);
             
-            // Ensure signerName is set for both cases
-            if (!isset($signerName)) {
-                $signerName = $request->input('signer_name', 'KADARUSMAN');
-            }
             
             // Ensure paymentTerms is defined for both cases and convert to integer
             if (!isset($paymentTerms)) {
@@ -471,7 +466,6 @@ class StockMovementController extends Controller
                 'finalAmount' => $finalAmount,
                 'currentDate' => now()->format('d F Y'),
                 'terbilang' => $terbilang,
-                'signerName' => $signerName,
                 'paymentTerms' => $paymentTerms
             ])->render();
 
@@ -526,7 +520,6 @@ class StockMovementController extends Controller
             $orderNumber = $request->input('order_number', '');
             $invoiceNumber = $request->input('invoice_number', '');
             $includeTax = $request->input('include_tax', '0') === '1';
-            $signerName = $request->input('signer_name', 'KADARUSMAN');
             $paymentTerms = (int) $request->input('payment_terms', 30);
             
             // Get customer data if customer_id is provided
@@ -678,7 +671,7 @@ class StockMovementController extends Controller
             
             // Signature lines
             $sheet->setCellValue('A' . ($footerRow + 6), '(..............................)');
-            $sheet->setCellValue('H' . ($footerRow + 6), '(' . $signerName . ')');
+            $sheet->setCellValue('H' . ($footerRow + 6), '(KADARUSMAN)');
 
             // Apply styling
             $this->applyInvoiceStyles($sheet, $totalsRow, $footerRow);
@@ -786,7 +779,6 @@ class StockMovementController extends Controller
             $draft->invoice_number = $request->input('invoice_number');
             $draft->transaction_date = $request->input('transaction_date') ?: now()->toDateString();
             $draft->notes = $request->input('notes');
-            $draft->signer_name = $request->input('signer_name', 'KADARUSMAN');
             $draft->payment_terms = (int) $request->input('payment_terms', 30);
             $draft->delivery_number = $request->input('delivery_number');
             $draft->include_tax = $request->input('include_tax', '0') === '1';
@@ -836,7 +828,6 @@ class StockMovementController extends Controller
             $draft->invoice_number = $request->input('invoice_number');
             $draft->transaction_date = $request->input('transaction_date') ?: now()->toDateString();
             $draft->notes = $request->input('notes');
-            $draft->signer_name = $request->input('signer_name', 'KADARUSMAN');
             $draft->payment_terms = (int) $request->input('payment_terms', 30);
             $draft->delivery_number = $request->input('delivery_number');
             $draft->include_tax = $request->input('include_tax', '0') === '1';
@@ -962,7 +953,6 @@ class StockMovementController extends Controller
                 $customerName = $request->input('customer_name', 'Customer');
                 $customerId = $request->input('customer_id', '');
                 $deliveryNumber = $request->input('delivery_number', '');
-                $signerName = $request->input('signer_name', 'Yayuk P. Wardani');
                 
                 if (empty($cartData) || !is_array($cartData)) {
                     return response()->json(['error' => 'Tidak ada data produk untuk diekspor'], 400);
@@ -999,7 +989,6 @@ class StockMovementController extends Controller
                 })->toArray();
                 
                 $customerName = $stockMovements->first()->customer->name ?? 'Customer';
-                $signerName = $stockMovements->first()->signer_name ?? 'Yayuk P. Wardani';
             }
             
             // Get customer data if customer_id is provided
@@ -1018,7 +1007,6 @@ class StockMovementController extends Controller
                 'customerName' => $customerName,
                 'customer' => $customer,
                 'deliveryNumber' => $deliveryNumber,
-                'signerName' => $signerName,
                 'currentDate' => now()->format('d F Y')
             ])->render();
 

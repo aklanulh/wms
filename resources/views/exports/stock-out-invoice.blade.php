@@ -411,7 +411,7 @@
             </div>
             <div class="footer-right" style="text-align: center;">
                 <strong>Hormat Kami,</strong><br><br>
-                <div class="signature-area"><strong>({{ $signerName }})</strong></div>
+                <div class="signature-area"><strong>(KADARUSMAN)</strong></div>
             </div>
         </div>
     </div>
