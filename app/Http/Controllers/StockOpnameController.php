@@ -17,7 +17,11 @@ class StockOpnameController extends Controller
         $opnames = StockOpname::with('details')
             ->orderByRaw('opname_date IS NULL, opname_date DESC')
             ->paginate(15);
-        return view('stock.opname.index', compact('opnames'));
+            
+        // Get count of draft opnames for notification
+        $draftCount = StockOpname::draft()->count();
+        
+        return view('stock.opname.index', compact('opnames', 'draftCount'));
     }
 
     public function create()

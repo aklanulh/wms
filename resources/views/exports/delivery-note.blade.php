@@ -85,6 +85,10 @@
             margin-bottom: 5px;
         }
         
+        .customer-info {
+            text-align: right;
+        }
+        
         .customer-info strong {
             font-weight: bold;
         }
@@ -123,11 +127,12 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 0;
+            border: 1px solid #000;
         }
         
         .products-table th {
             background-color: #e8e8e8;
-            border: 1px solid #000;
+            border: none;
             padding: 3px 2px;
             text-align: center;
             font-weight: bold;
@@ -136,7 +141,7 @@
         }
         
         .products-table td {
-            border: 1px solid #000;
+            border: none;
             padding: 2px 3px;
             text-align: center;
             font-size: 12px;
@@ -236,10 +241,11 @@
         <!-- Delivery Details -->
         <div class="delivery-details">
             <div class="delivery-left">
-                <div class="detail-row"><strong>No. Surat Jalan : {{ $deliveryNumber ?? 'SJ/1036/IX/MSA/25' }}</strong></div>
+                <div class="detail-row"><strong>No. Surat Jalan : {{ $deliveryNumber ?? 'SJ/1015/IX/MSA/25' }}</strong></div>
+                <div class="detail-row" style="margin-top: 5px;"><strong>Telah kami terima dengan baik barang sebagai berikut :</strong></div>
             </div>
             <div class="delivery-right">
-                <div class="detail-row"><strong>Telah kami terima dengan baik barang sebagai berikut :</strong></div>
+                <div class="detail-row">&nbsp;</div>
             </div>
         </div>
     

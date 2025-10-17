@@ -86,13 +86,27 @@
                         <i class="fas fa-arrow-down mr-3"></i>
                         Stok Masuk
                     </a>
-                    <a href="{{ route('stock.out.index') }}" class="flex items-center px-4 py-3 text-white hover:bg-blue-700 {{ request()->routeIs('stock.out.*') ? 'bg-blue-700' : '' }}">
-                        <i class="fas fa-arrow-up mr-3"></i>
-                        Stok Keluar
+                    <a href="{{ route('stock.out.index') }}" class="flex items-center justify-between px-4 py-3 text-white hover:bg-blue-700 {{ request()->routeIs('stock.out.*') ? 'bg-blue-700' : '' }}">
+                        <div class="flex items-center">
+                            <i class="fas fa-arrow-up mr-3"></i>
+                            Stok Keluar
+                        </div>
+                        @if(isset($sidebarDraftCount) && $sidebarDraftCount > 0)
+                            <span class="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[1.25rem]">
+                                {{ $sidebarDraftCount > 99 ? '99+' : $sidebarDraftCount }}
+                            </span>
+                        @endif
                     </a>
-                    <a href="{{ route('stock.opname.index') }}" class="flex items-center px-4 py-3 text-white hover:bg-blue-700 {{ request()->routeIs('stock.opname.*') ? 'bg-blue-700' : '' }}">
-                        <i class="fas fa-clipboard-check mr-3"></i>
-                        Stok Opname
+                    <a href="{{ route('stock.opname.index') }}" class="flex items-center justify-between px-4 py-3 text-white hover:bg-blue-700 {{ request()->routeIs('stock.opname.*') ? 'bg-blue-700' : '' }}">
+                        <div class="flex items-center">
+                            <i class="fas fa-clipboard-check mr-3"></i>
+                            Stok Opname
+                        </div>
+                        @if(isset($sidebarOpnameDraftCount) && $sidebarOpnameDraftCount > 0)
+                            <span class="bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[1.25rem]">
+                                {{ $sidebarOpnameDraftCount > 99 ? '99+' : $sidebarOpnameDraftCount }}
+                            </span>
+                        @endif
                     </a>
                 </div>
 

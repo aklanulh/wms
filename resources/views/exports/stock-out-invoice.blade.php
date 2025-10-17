@@ -34,6 +34,7 @@
             padding: 8px 8px 8px 8px;
             display: flex;
             align-items: flex-start;
+            justify-content: space-between;
         }
         
         .logo {
@@ -74,16 +75,18 @@
         .header-right {
             text-align: right;
             font-size: 13px;
-            width: 200px;
+            flex: 1;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
         }
         
         .date-info {
             margin-bottom: 5px;
         }
         
-        .customer-info strong {
-            font-weight: bold;
-        }
         
         .faktur-title {
             text-align: center;
@@ -119,11 +122,12 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 0;
+            border: 1px solid #000;
         }
         
         .products-table th {
             background-color: #e8e8e8;
-            border: 1px solid #000;
+            border: none;
             padding: 3px 2px;
             text-align: center;
             font-weight: bold;
@@ -132,7 +136,7 @@
         }
         
         .products-table td {
-            border: 1px solid #000;
+            border: none;
             padding: 2px 3px;
             text-align: center;
             font-size: 12px;
@@ -172,7 +176,7 @@
         }
         
         .totals-section {
-            margin-top: 10px;
+            margin-top: -15px;
             display: flex;
             justify-content: flex-end;
         }
@@ -180,12 +184,17 @@
         .totals-table {
             border-collapse: collapse;
             width: 250px;
+            border: 1px solid #000;
         }
         
         .totals-table td {
-            border: 1px solid #000;
+            border: none !important;
             padding: 3px 5px;
             font-size: 11px;
+        }
+        
+        .totals-table tr {
+            border: none !important;
         }
         
         .totals-table .label {
@@ -193,6 +202,7 @@
             font-weight: bold;
             text-align: center;
             width: 100px;
+            border: none !important;
         }
         
         .totals-table .amount {
@@ -200,6 +210,7 @@
             font-weight: bold;
             padding-right: 8px;
             white-space: nowrap;
+            border: none !important;
         }
         
         .footer-section {
@@ -270,12 +281,12 @@
                 </div>
             </div>
             <div class="header-right">
-                <div class="date-info">
+                <div class="date-info" style="text-align: right; margin-bottom: 5px;">
                     Bogor, {{ $currentDate }}<br>
                     Kepada Yth,<br>
                     <strong>{{ $customerName }}</strong>
                 </div>
-                <div class="customer-info">
+                <div style="text-align: right; align-self: flex-end; max-width: 200px;">
                     @if($customer && $customer->address)
                         {!! nl2br(e($customer->address)) !!}
                     @else
@@ -352,7 +363,7 @@
         </table>
         
         <!-- PO Number Section -->
-        <div style="margin: 8px 10px; padding: 4px; font-size: 10px;">
+        <div style="margin: 8px 10px 0 10px; padding: 4px; font-size: 10px;">
             <strong>PO No: {{ $orderNumber ?: '00535/PO/PMC/06/2025' }}</strong>
         </div>
         
@@ -379,7 +390,7 @@
         <!-- Terbilang -->
         <div style="margin: 10px 10px; font-size: 10px; display: flex; align-items: center;">
             <strong>Terbilang :</strong>
-            <div style="margin-left: 10px; padding: 2px 5px; background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 2px, transparent 2px, transparent 4px); width: 250px; height: 18px; border: 1px solid #ccc; display: flex; align-items: center;">
+            <div style="margin-left: 10px; padding: 2px 5px; background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 2px, transparent 2px, transparent 4px); width: 400px; height: 18px; border: 1px solid #ccc; display: flex; align-items: center;">
                 <strong style="color: #000; font-size: 9px; line-height: 1;">{{ ucwords(trim($terbilang)) }} rupiah</strong>
             </div>
         </div>

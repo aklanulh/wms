@@ -4,7 +4,15 @@
 
 @section('content')
 <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold text-gray-900">Daftar Stok Opname</h1>
+    <div>
+        <h1 class="text-2xl font-bold text-gray-900">Daftar Stok Opname</h1>
+        @if(isset($draftCount) && $draftCount > 0)
+            <p class="text-sm text-orange-600 mt-1">
+                <i class="fas fa-exclamation-circle mr-1"></i>
+                {{ $draftCount }} opname masih dalam status draft
+            </p>
+        @endif
+    </div>
     <a href="{{ route('stock.opname.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
         <i class="fas fa-plus mr-2"></i>
         Buat Stok Opname
