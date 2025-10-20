@@ -386,6 +386,7 @@ class StockMovementController extends Controller
                 $invoiceNumber = $request->input('invoice_number', '');
                 $includeTax = $request->input('include_tax', '0') === '1';
                 $paymentTerms = (int) $request->input('payment_terms', 30);
+                $bankOption = $request->input('bank_option', 'mandiri_cibubur');
                 
                 if (empty($cartData) || !is_array($cartData)) {
                     return response()->json(['error' => 'Tidak ada data produk untuk diekspor'], 400);
@@ -424,6 +425,7 @@ class StockMovementController extends Controller
                 $customerName = $stockMovements->first()->customer->name ?? 'Customer';
                 $includeTax = $stockMovements->first()->include_tax;
                 $paymentTerms = (int) ($stockMovements->first()->payment_terms ?? 30);
+                $bankOption = $request->input('bank_option', 'mandiri_cibubur');
             }
             
             // Get customer data if customer_id is provided
@@ -454,6 +456,9 @@ class StockMovementController extends Controller
             }
             $paymentTerms = (int) $paymentTerms; // Convert to integer
             
+            // Get bank information
+            $bankInfo = $this->getBankInfo($bankOption ?? 'mandiri_cibubur');
+            
             $html = view('exports.stock-out-invoice', [
                 'cartData' => $cartData,
                 'customerName' => $customerName,
@@ -466,7 +471,8 @@ class StockMovementController extends Controller
                 'finalAmount' => $finalAmount,
                 'currentDate' => now()->format('d F Y'),
                 'terbilang' => $terbilang,
-                'paymentTerms' => $paymentTerms
+                'paymentTerms' => $paymentTerms,
+                'bankInfo' => $bankInfo
             ])->render();
 
             return response($html, 200, [
@@ -521,6 +527,7 @@ class StockMovementController extends Controller
             $invoiceNumber = $request->input('invoice_number', '');
             $includeTax = $request->input('include_tax', '0') === '1';
             $paymentTerms = (int) $request->input('payment_terms', 30);
+            $bankOption = $request->input('bank_option', 'mandiri_cibubur');
             
             // Get customer data if customer_id is provided
             $customer = null;
@@ -622,11 +629,11 @@ class StockMovementController extends Controller
                 $sheet->setCellValue('A' . $row, $index + 1);
                 $sheet->setCellValue('B' . $row, $product ? $product->name : 'Unknown Product');
                 $sheet->setCellValue('C' . $row, $product ? $product->code : '');
-                $sheet->setCellValue('D' . $row, 'Rp ' . number_format($item['unit_price'], 2, ',', '.'));
+                $sheet->setCellValue('D' . $row, 'Rp ' . number_format($item['unit_price'], 0, ',', '.'));
                 $sheet->setCellValue('E' . $row, $item['quantity'] . ' ' . $unit);
                 $sheet->setCellValue('F' . $row, $discountPercent . '%');
-                $sheet->setCellValue('G' . $row, 'Rp ' . number_format($nettoUnitPrice, 2, ',', '.'));
-                $sheet->setCellValue('H' . $row, 'Rp ' . number_format($nettoAmount, 2, ',', '.'));
+                $sheet->setCellValue('G' . $row, 'Rp ' . number_format($nettoUnitPrice, 0, ',', '.'));
+                $sheet->setCellValue('H' . $row, 'Rp ' . number_format($nettoAmount, 0, ',', '.'));
                 $row++;
             }
 
@@ -643,17 +650,17 @@ class StockMovementController extends Controller
             // Totals section
             $totalsRow = 25;
             $sheet->setCellValue('G' . $totalsRow, 'Sub Total');
-            $sheet->setCellValue('H' . $totalsRow, 'Rp ' . number_format($subtotal, 2, ',', '.'));
+            $sheet->setCellValue('H' . $totalsRow, 'Rp ' . number_format($subtotal, 0, ',', '.'));
             
             if ($includeTax) {
                 $totalsRow++;
                 $sheet->setCellValue('G' . $totalsRow, 'PPN 11%');
-                $sheet->setCellValue('H' . $totalsRow, 'Rp ' . number_format($taxAmount, 2, ',', '.'));
+                $sheet->setCellValue('H' . $totalsRow, 'Rp ' . number_format($taxAmount, 0, ',', '.'));
             }
             
             $totalsRow++;
             $sheet->setCellValue('G' . $totalsRow, 'Total Faktur');
-            $sheet->setCellValue('H' . $totalsRow, 'Rp ' . number_format($finalAmount, 2, ',', '.'));
+            $sheet->setCellValue('H' . $totalsRow, 'Rp ' . number_format($finalAmount, 0, ',', '.'));
 
             // Terbilang
             $terbilangExcel = $this->terbilang($finalAmount);
@@ -665,9 +672,12 @@ class StockMovementController extends Controller
             $sheet->setCellValue('C' . $footerRow, 'For Payment, Please Transfer to :');
             $sheet->setCellValue('F' . $footerRow, 'Hormat Kami,');
             
-            $sheet->setCellValue('C' . ($footerRow + 1), 'PT. MITRAJAYA SELARAS ABADI');
-            $sheet->setCellValue('C' . ($footerRow + 2), 'BANK MANDIRI KCP CIBUBUR KOTA WISATA');
-            $sheet->setCellValue('C' . ($footerRow + 3), 'NO. REK. 133 00 1559409 6');
+            // Get bank information
+            $bankInfo = $this->getBankInfo($bankOption);
+            
+            $sheet->setCellValue('C' . ($footerRow + 1), $bankInfo['account_name']);
+            $sheet->setCellValue('C' . ($footerRow + 2), $bankInfo['name']);
+            $sheet->setCellValue('C' . ($footerRow + 3), 'NO. REK. ' . $bankInfo['account']);
             
             // Signature lines
             $sheet->setCellValue('A' . ($footerRow + 6), '(....................................)');
@@ -781,6 +791,7 @@ class StockMovementController extends Controller
             $draft->notes = $request->input('notes');
             $draft->payment_terms = (int) $request->input('payment_terms', 30);
             $draft->delivery_number = $request->input('delivery_number');
+            $draft->bank_option = $request->input('bank_option', 'mandiri_cibubur');
             $draft->include_tax = $request->input('include_tax', '0') === '1';
             $draft->cart_data = $cartData;
             $draft->total_amount = $draft->calculateTotalAmount();
@@ -830,6 +841,7 @@ class StockMovementController extends Controller
             $draft->notes = $request->input('notes');
             $draft->payment_terms = (int) $request->input('payment_terms', 30);
             $draft->delivery_number = $request->input('delivery_number');
+            $draft->bank_option = $request->input('bank_option', 'mandiri_cibubur');
             $draft->include_tax = $request->input('include_tax', '0') === '1';
             $draft->cart_data = $cartData;
             $draft->total_amount = $draft->calculateTotalAmount();
@@ -1018,5 +1030,33 @@ class StockMovementController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Terjadi kesalahan: ' . $e->getMessage()], 500);
         }
+    }
+
+    private function getBankInfo($bankOption)
+    {
+        $banks = [
+            'mandiri_cibubur' => [
+                'name' => 'BANK MANDIRI KCP CIBUBUR KOTA WISATA',
+                'account' => '133 00 1559409 6',
+                'account_name' => 'PT. MITRAJAYA SELARAS ABADI'
+            ],
+            'mandiri_bogor' => [
+                'name' => 'BANK MANDIRI KCP PASAR ANYAR BOGOR',
+                'account' => '133 00 3271117 8',
+                'account_name' => 'PT. MITRAJAYA SELARAS ABADI'
+            ],
+            'dki' => [
+                'name' => 'BANK DKI KCP DKI PBS',
+                'account' => '300 08 00000 9',
+                'account_name' => 'PT. MITRAJAYA SELARAS ABADI'
+            ],
+            'bca' => [
+                'name' => 'BANK BCA',
+                'account' => '5725 0180 18',
+                'account_name' => 'YAYUK PRASETYO WARDANI'
+            ]
+        ];
+
+        return $banks[$bankOption] ?? $banks['mandiri_cibubur'];
     }
 }

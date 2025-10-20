@@ -402,12 +402,33 @@
                     </div>
                     
                     <div>
+                        <label for="bank_option" class="block text-sm font-medium text-gray-700 mb-2">Bank untuk Payment</label>
+                        <select name="bank_option" id="bank_option" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="mandiri_cibubur" {{ old('bank_option', isset($draft) ? $draft->bank_option : 'mandiri_cibubur') == 'mandiri_cibubur' ? 'selected' : '' }}>
+                                Mandiri KCP Cibubur Kota Wisata
+                            </option>
+                            <option value="mandiri_bogor" {{ old('bank_option', isset($draft) ? $draft->bank_option : '') == 'mandiri_bogor' ? 'selected' : '' }}>
+                                Mandiri KCP Pasar Anyar Bogor
+                            </option>
+                            <option value="dki" {{ old('bank_option', isset($draft) ? $draft->bank_option : '') == 'dki' ? 'selected' : '' }}>
+                                Bank DKI KCP DKI PBS
+                            </option>
+                            <option value="bca" {{ old('bank_option', isset($draft) ? $draft->bank_option : '') == 'bca' ? 'selected' : '' }}>
+                                BCA
+                            </option>
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">Pilih bank yang akan ditampilkan pada faktur</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
                         <label for="delivery_number" class="block text-sm font-medium text-gray-700 mb-2">Nomor Surat Jalan</label>
                         <input type="text" name="delivery_number" id="delivery_number" 
                                value="{{ old('delivery_number', isset($draft) ? $draft->delivery_number : '') }}" 
                                placeholder="SJ/1036/IX/MSA/25"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <p class="text-xs text-gray-500 mt-1">Kosongkan untuk generate otomatis</p>
                     </div>
                 </div>
 
@@ -662,6 +683,7 @@ function stockOutForm() {
                 const orderNumber = document.getElementById('order_number')?.value || '';
                 const invoiceNumber = document.getElementById('invoice_number')?.value || '';
                 const paymentTerms = document.getElementById('payment_terms')?.value || '30';
+                const bankOption = document.getElementById('bank_option')?.value || 'mandiri_cibubur';
                 
                 // Create form data
                 const formData = new FormData();
@@ -672,6 +694,7 @@ function stockOutForm() {
                 formData.append('invoice_number', invoiceNumber);
                 formData.append('include_tax', this.includeTax ? '1' : '0');
                 formData.append('payment_terms', paymentTerms);
+                formData.append('bank_option', bankOption);
                 
                 // Get CSRF token
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -715,6 +738,7 @@ function stockOutForm() {
                 const orderNumber = document.getElementById('order_number')?.value || '';
                 const invoiceNumber = document.getElementById('invoice_number')?.value || '';
                 const paymentTerms = document.getElementById('payment_terms')?.value || '30';
+                const bankOption = document.getElementById('bank_option')?.value || 'mandiri_cibubur';
                 
                 // Create form data
                 const formData = new FormData();
@@ -725,6 +749,7 @@ function stockOutForm() {
                 formData.append('invoice_number', invoiceNumber);
                 formData.append('include_tax', this.includeTax ? '1' : '0');
                 formData.append('payment_terms', paymentTerms);
+                formData.append('bank_option', bankOption);
                 
                 // Get CSRF token
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -819,6 +844,7 @@ function stockOutForm() {
                 const notes = document.getElementById('notes')?.value || '';
                 const paymentTerms = document.getElementById('payment_terms')?.value || '30';
                 const deliveryNumber = document.getElementById('delivery_number')?.value || '';
+                const bankOption = document.getElementById('bank_option')?.value || 'mandiri_cibubur';
                 
                 // Create form data
                 const formData = new FormData();
@@ -831,6 +857,7 @@ function stockOutForm() {
                 formData.append('notes', notes);
                 formData.append('payment_terms', paymentTerms);
                 formData.append('delivery_number', deliveryNumber);
+                formData.append('bank_option', bankOption);
                 formData.append('include_tax', this.includeTax ? '1' : '0');
                 formData.append('is_draft', '1'); // Mark as draft
                 

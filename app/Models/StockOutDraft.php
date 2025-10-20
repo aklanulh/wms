@@ -19,6 +19,7 @@ class StockOutDraft extends Model
         'notes',
         'payment_terms',
         'delivery_number',
+        'bank_option',
         'include_tax',
         'cart_data',
         'total_amount'

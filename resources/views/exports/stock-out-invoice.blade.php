@@ -338,11 +338,11 @@
                         <td class="center-cell">{{ $index + 1 }}</td>
                         <td class="text-left">{{ $product ? $product->name : 'Unknown Product' }}</td>
                         <td class="center-cell">{{ $product ? $product->code : '' }}</td>
-                        <td class="currency-cell"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($item['unit_price'], 2, ',', '.') }}</span></td>
+                        <td class="currency-cell"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($item['unit_price'], 0, ',', '.') }}</span></td>
                         <td class="center-cell">{{ $item['quantity'] }} {{ $unit }}</td>
                         <td class="center-cell">{{ $discountPercent }}%</td>
-                        <td class="currency-cell"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($item['unit_price'] * (1 - $discountPercent/100), 2, ',', '.') }}</span></td>
-                        <td class="currency-cell"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($nettoAmount, 2, ',', '.') }}</span></td>
+                        <td class="currency-cell"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($item['unit_price'] * (1 - $discountPercent/100), 0, ',', '.') }}</span></td>
+                        <td class="currency-cell"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($nettoAmount, 0, ',', '.') }}</span></td>
                     </tr>
                 @endforeach
                 
@@ -372,17 +372,17 @@
             <table class="totals-table">
                 <tr>
                     <td class="label">Sub Total</td>
-                    <td class="amount"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($subtotal, 2, ',', '.') }}</span></td>
+                    <td class="amount"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($subtotal, 0, ',', '.') }}</span></td>
                 </tr>
                 @if($includeTax)
                 <tr>
                     <td class="label">PPN 11%</td>
-                    <td class="amount"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($taxAmount, 2, ',', '.') }}</span></td>
+                    <td class="amount"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($taxAmount, 0, ',', '.') }}</span></td>
                 </tr>
                 @endif
                 <tr>
                     <td class="label">Total Faktur</td>
-                    <td class="amount"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($finalAmount, 2, ',', '.') }}</span></td>
+                    <td class="amount"><span class="currency-rp">Rp</span><span class="currency-amount">{{ number_format($finalAmount, 0, ',', '.') }}</span></td>
                 </tr>
             </table>
         </div>
@@ -404,9 +404,9 @@
             <div class="footer-center">
                 <strong>For Payment, Please Transfer to :</strong><br>
                 <div class="bank-info">
-                    <strong>PT. MITRAJAYA SELARAS ABADI</strong><br>
-                    <strong>BANK MANDIRI KCP CIBUBUR KOTA WISATA</strong><br>
-                    <strong>NO. REK. 133 00 1559409 6</strong>
+                    <strong>{{ $bankInfo['account_name'] }}</strong><br>
+                    <strong>{{ $bankInfo['name'] }}</strong><br>
+                    <strong>NO. REK. {{ $bankInfo['account'] }}</strong>
                 </div>
             </div>
             <div class="footer-right" style="text-align: center;">
