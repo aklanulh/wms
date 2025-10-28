@@ -83,9 +83,13 @@ class ProductController extends Controller
             $chartData = $this->generateProductChartData($product->id, $selectedYear);
             
             // Get available years for dropdown
+            $yearExpression = config('database.default') === 'sqlite' 
+                ? "strftime('%Y', transaction_date) as year"
+                : 'YEAR(transaction_date) as year';
+                
             $availableYears = StockMovement::where('product_id', $product->id)
                 ->where('type', 'out')
-                ->selectRaw('YEAR(transaction_date) as year')
+                ->selectRaw($yearExpression)
                 ->distinct()
                 ->orderBy('year', 'desc')
                 ->pluck('year')
